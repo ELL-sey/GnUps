@@ -1,0 +1,87 @@
+    sshd_config
+
+============================
+  Основные настройки
+============================
+
+Port 22                     # Порт для SSH
+AddressFamily any           # Семейство: any, inet (IPv4), inet6 (IPv6)
+ListenAddress 0.0.0.0       # IP-адрес для прослушивания
+
+
+============================
+   Аутентификация и доступ
+============================
+
+PasswordAuthentication yes                 # Вход по паролю
+PermitEmptyPasswords no                    # Запретить пустые пароли
+PubkeyAuthentication yes                   # Вход по ключам
+AuthorizedKeysFile .ssh/authorized_keys    # Файлы с ключами пользователей
+AuthenticationMethods publickey,password   # сначала ключ, потом пароль
+PermitRootLogin prohibit-password          # Вход root: yes, no, prohibit-password (только ключи)
+UsePAM yes                                 # Использовать PAM для аутентификации
+
+
+============================
+   Контроль доступа
+============================
+
+AllowUsers user1 user2@192.168.1.*     # Разрешить вход только этим пользователям
+AllowGroups group1 group2              # Разрешить вход только этим группам
+DenyUsers baduser                      # Запретить вход этим пользователям
+DenyGroups badgroup                    # Запретить вход этим группам
+
+
+============================
+   Перенаправление (Forwarding)
+============================
+
+AllowAgentForwarding yes          # Разрешить проброс ssh-agent
+AllowTcpForwarding yes            # Разрешить TCP-проброс
+AllowStreamLocalForwarding yes    # Разрешить проброс Unix-сокетов
+X11Forwarding yes                 # Разрешить проброс X11
+
+
+============================
+   Безопасность и шифрование
+============================
+
+Ciphers aes256-ctr,aes192-ctr,aes128-ctr          # Разрешённые алгоритмы шифрования
+KexAlgorithms curve25519-sha256@libssh.org        # Алгоритмы обмена ключами
+MACs hmac-sha2-256,hmac-sha2-512                  # Алгоритмы проверки целостности
+CASignatureAlgorithms ssh-ed25519                 # Алгоритмы подписи сертификатов
+
+
+============================
+   Ограничения сессии
+============================
+
+LoginGraceTime 2m          # Время на ввод пароля после подключения
+MaxAuthTries 3             # Максимальное число попыток аутентификации
+MaxSessions 10             # Максимальное число сессий на одно соединение
+
+ClientAliveInterval 300    # Интервал (в секундах) для проверки активности клиента
+ClientAliveCountMax 2      # Максимальное число проверок без ответа
+
+============================
+   Окружение и баннеры
+============================
+
+AcceptEnv LANG LC_*        # Переменные окружения, принимаемые от клиента
+PrintMotd no               # Показывать /etc/motd (отключено в Debian/Ubuntu)
+PrintLastLog yes           # Показывать время последнего входа
+Banner /etc/issue.net      # Показывать баннер до аутентификации
+
+============================
+   Подсистемы
+============================
+
+Subsystem sftp /usr/lib/openssh/sftp-server  # Подсистема SFTP (в Debian/Ubuntu)
+
+============================
+   Расширенные настройки
+============================
+
+ChrootDirectory /path/to/chroot         # Поместить пользователя в chroot после аутентификации
+ChannelTimeout session=5m               # Закрыть неактивные сессии через 5 минут (OpenSSH 9.8+)
+Include /etc/ssh/sshd_config.d/*.conf   # Включать файлы из директории (в Debian/Ubuntu)

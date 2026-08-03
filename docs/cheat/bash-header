@@ -1,0 +1,57 @@
+==================================
+     Bash параметры для скрипта
+==================================
+
+## Базовый шаблон скрипта
+#!/usr/bin/env bash
+set -e          # Выход при ошибке
+set -u          # Ошибка при использовании необъявленных переменных (nounset)
+set -o pipefail # Ошибка в конвейере (если одна команда упала)
+set -o errtrace # Перехват ошибок в функциях и подстановках
+
+## Настройка отладки
+set -x        # Включить отладку (показывать каждую команду)
+set -v        # Показывать вводимые строки (режим подробного вывода)
+set -n        # Проверить синтаксис без выполнения
+
+## Перехват ошибок и завершения
+trap 'echo "Ошибка в строке $LINENO"; exit 1' ERR
+trap 'echo "Скрипт завершён"' EXIT
+trap 'echo "Прервано Ctrl+C"; exit 130' INT
+trap 'echo "Скрипт остановлен"; exit 143' TERM
+
+## Путь к скрипту
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SCRIPT_NAME="$(basename "${BASH_SOURCE[0]}")"
+SCRIPT_PATH="$SCRIPT_DIR/$SCRIPT_NAME"
+
+## Проверка аргументов
+if [ $# -lt 1 ]; then
+    echo "Использование: $0 <аргумент>"
+    echo "Пример: $0 /path/to/file"
+    exit 1
+fi
+
+## Проверка окружения
+if ! command -v some_command &> /dev/null; then
+    echo "Ошибка: some_command не установлен"
+    exit 1
+fi
+
+
+## Цветной вывод
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+NC='\033[0m' # No Color
+
+echo -e "${GREEN}[OK]${NC} Всё хорошо"
+echo -e "${RED}[ERROR]${NC} Произошла ошибка"
+echo -e "${YELLOW}[WARN]${NC} Предупреждение"
+
+
+
+## Обработка временных файлов
+TEMP_FILE=$(mktemp)
+trap 'rm -f "$TEMP_FILE"' EXIT
+

@@ -1,0 +1,57 @@
+===================================
+        Сетевые порты
+===================================
+
+------ Веб-серверы
+80           HTTP (HyperText Transfer Protocol)
+443          HTTPS (HTTP over SSL/TLS)
+8080         HTTP-альтернативный (Tomcat, прокси)
+8443         HTTPS-альтернативный
+
+------ Базы данных
+3306         MySQL / MariaDB
+5432         PostgreSQL
+6379         Redis
+27017        MongoDB
+1433         MS SQL Server
+1521         Oracle (слушатель)
+9042         Cassandra
+
+------ Доступы
+22           SSH
+23           Telnet
+3389         RDP (Remote Desktop Protocol - Windows)
+5900         VNC (Virtual Network Computing)
+
+------ Почтовые серверы
+25           SMTP (Simple Mail Transfer Protocol)
+465          SMTPS (SMTP over SSL)
+587          SMTP (с аутентификацией - submission)
+993          IMAPS (IMAP over SSL)
+995          POP3S (POP3 over SSL)
+
+------ DNS / Сеть
+53           DNS (Domain Name System)
+67           DHCP (Dynamic Host Configuration Protocol) #68
+161          SNMP (Simple Network Management Protocol)
+123          NTP (Network Time Protocol)
+
+------ Прокси / Кэширование
+3128         Squid (HTTP-прокси)
+1080         SOCKS-прокси
+8123         HAProxy (статистика)
+
+------ Kubernetes / Docker
+2375         Docker (нешифрованный REST API)
+2376         Docker (защищённый REST API)
+6443         Kubernetes API Server
+10250        Kubernetes Kubelet API
+10255        Kubernetes Kubelet Read-Only API
+10256        Kubernetes kube-proxy
+
+------ Прочее
+514          Syslog
+631          CUPS (печать - Internet Printing Protocol)
+873          rsync
+1433         MS SQL Server (повтор для запоминания)
+5000         Flask / Werkzeug (по умолчанию)

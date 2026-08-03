@@ -1,0 +1,68 @@
+==============================================
+    sshd_config Порядок применения настроек
+==============================================
+
+## Основное правило
+В sshd_config для большинства параметров используется ПЕРВОЕ найденное значение
+Файлы в /etc/ssh/sshd_config.d/*.conf обрабатываются в лексикографическом порядке:
+#                                00-security.conf  -> 1
+#                                01-somename.conf  -> 2
+#                                10-work.conf      -> 3
+#                                50-last.conf      -> 4
+#                                                          сохраняется первое значение
+
+## Влияние Include в основном файле
+Include /etc/ssh/sshd_config.d/*.conf
+PermitRootLogin yes
+#                          Результат: no (из 00-security.conf)
+
+PermitRootLogin yes
+Include /etc/ssh/sshd_config.d/*.conf
+#                          Результат: yes (первое значение из основного конфига)
+
+
+------------------------
+        Match
+------------------------
+# Match - отдельный контекст, который может переопределить глобальные значения
+
+# Пример:
+PermitRootLogin no
+
+Match Address 192.168.1.0/24
+    PermitRootLogin yes
+
+#                               Для подключений из 192.168.1.0/24 будет yes
+#                               для остальных - no
+
+
+## Параметры командной строки имеют наивысший приоритет
+
+
+------------------------
+     не first wins
+------------------------
+
+## Параметры, которые накапливаются
+AllowUsers
+AllowGroups
+AcceptEnv
+DenyUsers
+DenyGroups
+
+# Пример:
+AllowUsers alice
+AllowUsers bob
+#                          Результат: разрешены оба пользователя
+
+------------------------
+     проверки
+------------------------
+
+sudo sshd -t                           # Проверить синтаксис
+sshd -T                                # Просмотр всех настроек
+sudo sshd -T | grep permitrootlogin    # Посмотреть глобальные настройки
+
+# Проверить конкретные сценарии с Match:
+sudo sshd -T -C user=root,addr=192.168.1.50,host=example.com | grep permitrootlogin
+sudo sshd -T -C user=root,addr=203.0.113.50,host=example.com | grep permitrootlogin
