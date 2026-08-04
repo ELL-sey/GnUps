@@ -1,0 +1,17 @@
+# =======================================
+# NTFY Login Alert Configuration
+# =======================================
+# Создано: Tue Aug  4 02:31:44 AM UTC 2025
+
+# Обязательные параметры
+NTFY_URL="ntfy.domain.ru"
+NTFY_TOPIC="logins"
+
+# Опциональные параметры
+NTFY_TOKEN="tk_s...r"
+NTFY_PRIORITY="high"
+NTFY_TAGS="warning,pam,linux,login"
+
+# Системные параметры
+IP_HOST="192.168.1.23"
+NTFY_TIMEOUT="5"
