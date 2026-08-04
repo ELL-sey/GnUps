@@ -9,3 +9,7 @@ alias ipc='ipcalc -b'
 
 alias lldp_start='sudo systemctl  start  lldpd'
 alias lldp_show='watch "sudo lldpcli show neighbors details"'
+
+
+
+alias dig='dig ANY  +noall +answer'
