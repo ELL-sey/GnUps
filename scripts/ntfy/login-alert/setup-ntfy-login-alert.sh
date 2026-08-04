@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -eo pipefail
 
 # =======================================
 # Цвета и функции печати
@@ -21,7 +21,6 @@ print_header()  { echo -e "\n${CYAN}===> $1 <===${NC}\n"; }
 # Константы
 # =======================================
 SCRIPT_URL="https://raw.githubusercontent.com/ELL-sey/GnUps/main/scripts/ntfy/login-alert/ntfy-login-alert.sh" 
-
 CONFIG_DIR="/etc/ntfy"
 CONFIG_FILE="$CONFIG_DIR/server.conf"
 SCRIPT_PATH="/usr/local/bin/ntfy-login-alert.sh"
@@ -61,21 +60,29 @@ print_success "Скрипт установлен: $SCRIPT_PATH"
 # 2. Сбор настроек NTFY
 # =======================================
 print_header "2. Настройка подключения к NTFY"
-print_info "Нажмите Enter, чтобы использовать значение по умолчанию (в скобках)"
+print_info "Enter, чтобы использовать по умолчанию (в скобках)"
 
-read -p "NTFY_URL (сервер, например ntfy.sh) [ntfy.sh]: " input || true
-NTFY_URL="${input:-ntfy.sh}"
+# Инициализируем
+NTFY_URL="ntfy.sh"
+NTFY_TOPIC="logins"
+NTFY_TOKEN=""
+NTFY_PRIORITY="high"
+NTFY_TAGS="warning,pam,linux,login"
 
-read -p "NTFY_TOPIC (название топика) [logins]: " input || true
-NTFY_TOPIC="${input:-logins}"
+read -p "NTFY_URL (сервер, например ntfy.sh) [$NTFY_URL]: " input || true
+NTFY_URL="${input:-$NTFY_URL}"
 
-read -p "NTFY_TOKEN (токен авторизации) []: " NTFY_TOKEN || true
+read -p "NTFY_TOPIC (название топика) [$NTFY_TOPIC]: " input || true
+NTFY_TOPIC="${input:-$NTFY_TOPIC}"
 
-read -p "NTFY_PRIORITY (high/default/low/min) [high]: " input || true
-NTFY_PRIORITY="${input:-high}"
+read -p "NTFY_TOKEN (токен авторизации): " input || true
+NTFY_TOKEN="${input:-$NTFY_TOKEN}"
 
-read -p "NTFY_TAGS (теги через запятую) [warning,pam,linux,login]: " input || true
-NTFY_TAGS="${input:-warning,pam,linux,login}"
+read -p "NTFY_PRIORITY (high/default/low/min) [$NTFY_PRIORITY]: " input || true
+NTFY_PRIORITY="${input:-$NTFY_PRIORITY}"
+
+read -p "NTFY_TAGS (теги через запятую) [$NTFY_TAGS]: " input || true
+NTFY_TAGS="${input:-$NTFY_TAGS}"
 
 print_info "Определение основного IP хоста..."
 IP_HOST=$(ip route get 8.8.8.8 2>/dev/null | awk -F'src ' '{print $2}' | awk '{print $1; exit}')
@@ -109,7 +116,6 @@ IP_HOST="$IP_HOST"
 NTFY_TIMEOUT="5"
 EOF
 
-# PAM-скрипт выполняется от имени авторизующегося пользователя
 chmod 644 "$CONFIG_FILE"
 chown root:root "$CONFIG_FILE"
 
@@ -155,8 +161,9 @@ fi
 # =======================================
 print_header "5. Тестирование"
 
-read -p "Отправить тестовое уведомление прямо сейчас? (y/n) [y]: " TEST_SEND || true
-TEST_SEND="${TEST_SEND:-y}"
+TEST_SEND="y"
+read -p "Отправить тестовое уведомление прямо сейчас? (y/n) [y]: " input || true
+TEST_SEND="${input:-$TEST_SEND}"
 
 if [[ "$TEST_SEND" =~ ^[Yy]$ ]]; then
     print_info "Отправка тестового уведомления..."
