@@ -1,0 +1,18 @@
+
+alias l2='eza -T -L 2 --group-directories-first'
+alias l3='eza -T -L 3 --group-directories-first'
+alias la='eza -hl --absolute --icons --no-permissions --no-user --group-directories-first'
+alias laa='eza -hal --absolute --icons --no-permissions --no-user --group-directories-first'
+alias lah='eza -hal --absolute --icons --no-permissions --no-user --group-directories-first'
+alias lf='eza -hlf  --icons --no-permissions --no-user --octal-permissions'
+alias lfa='eza -hlf  --icons --no-permissions --no-user --octal-permissions -a'
+alias lh='eza -lah --group-directories-first -d .* --no-permissions --octal-permissions --no-user --icons'
+alias ld='eza  -l --icons --no-permissions --no-user --only-dirs --no-filesize --no-time'
+alias lda='eza  -l --icons --no-permissions --no-user --only-dirs --no-filesize --no-time -a'
+alias lll='eza  -lh -i -g -H -o --group-directories-first'
+alias llla='eza  -lh -i -g -H -o --group-directories-first  --absolute'
+alias l='eza -hl  --icons --no-permissions --no-user --group-directories-first --no-filesize'
+alias la='eza -hla  --icons --no-permissions --no-user --group-directories-first --no-filesize'
+alias ll='eza -hl  --icons --no-permissions --no-user --group-directories-first --octal-permissions'
+alias lla='eza -hla  --icons --no-permissions --no-user --group-directories-first --octal-permissions'
+
