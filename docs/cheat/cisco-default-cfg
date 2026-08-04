@@ -1,0 +1,55 @@
+Дефолтная настройка
+
+
+# Для удобства
+no ip domain-lookup
+terminal length 0
+clock set 07:36:00 10 September 2025 
+clock update-calendar
+
+
+
+# Имена
+host-name name
+ip domain name name.local
+
+
+
+
+# Secure
+banner #************ AUTHORIZED ACCESS ONLY *************
+UNAUTHORIZED ACCESS TO THIS DEVICE IS PROHIBITED.#
+aaa new-model
+service password-encryption
+no ip http server
+no ip http secure-server
+# pwgen -sB 20 2                                      gen passes
+username master privilege 15 secret pass1
+enable secret pass2
+
+
+# SSH
+crypto key generate rsa
+1024
+ip ssh version 2
+ip ssh authentication-retries 2
+login block-for 60 attempts 3 within 20
+login delay 2
+login on-failure log
+login on-success log
+line vty 0 4
+transport input ssh
+logging synchronous
+exec-timeout 30
+login local
+
+
+# console
+aaa authentication login MY_LIST local
+line console 0
+login authentication MY_LIST
+line console 0
+logging synchronous
+exec-timeout 30
+
+

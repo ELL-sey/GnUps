@@ -1,0 +1,72 @@
+Сброс cisco
+
+=================
+     switch
+=================
+
+
+#         1) Подключаемся через консоль
+#         2) Нажимаем Mode, включаем коммутатор, удерживаем кнопку пока SYST не потухнет
+#         3) Для инициализации флеш памяти
+flash_init
+load_helper
+
+------- сброс пароля ---------
+# переименовать -> ребут
+dir flash:
+rename flash:/config.text flash:/config.old
+boot
+# именуем обратно, подгружаем, настриваем, сохраняем
+rename flash:config.old flash:config.text 
+copy flash:config.text system:running-config
+#               меняем пароли
+copy running-config startup-config
+
+
+------- полный сброс ---------
+# просто удаляем файлы и в ребут
+dir flash:
+delete flash:/config.text
+delete flash:/vlan.dat
+boot
+
+
+
+
+
+
+
+=================
+     router
+=================
+
+#         1) Перезагружаем маршрутизатор
+#         2) жмём Ctrl-C или Ctrl-Break если можно
+#         2.b) параметры
+ali+B (или спам пробела)
+Speed (или Baud) - 1200
+Data bits - 8
+Stop bits - 1 
+Parity - No
+Flow control - No
+
+# делаем спам пробела
+
+------- сброс пароля ---------
+confreg 0x2142
+reset
+enable
+copy start run
+#           Меняем все интересующие нас пароли на новые
+do copy run start
+config-register 0x2102
+reload
+
+------- полный сброс ---------
+confreg 0x2142
+reset
+no
+enable
+copy run start
+conf t
+config-register 0x2102
