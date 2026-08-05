@@ -1,0 +1,21 @@
+=============
+Route Map
+=============
+
+Синтаксис
+route-map {map_name} {permit|deny} {seq}
+[match {expression}]
+[set {expression}]
+
+# Создать access-list
+access-list 173 permit tcp host 192.168.5.250 any eq 443
+
+# Создать саму мапу
+route-map MY-REDIRECT permit 10
+ match ip address 173
+ set ip next-hop 192.168.5.173
+
+# И повесить на интерфейс
+interface GigabitEthernet0/0/3
+ip policy route-map REDIRECT-PROXY
+
